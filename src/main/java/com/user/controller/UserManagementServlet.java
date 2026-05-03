@@ -51,7 +51,11 @@ public class UserManagementServlet extends HttpServlet {
             user.setName(request.getParameter("name"));
             user.setEmail(request.getParameter("email"));
             user.setPassword(request.getParameter("password"));
-            user.setProfileDetails(request.getParameter("profileDetails"));
+            user.setRole(request.getParameter("role"));
+            String deptIdStr = request.getParameter("deptId");
+            if (deptIdStr != null && !deptIdStr.isEmpty()) {
+                user.setDeptId(Integer.parseInt(deptIdStr));
+            }
             userManagementDAO.addUser(user);
         } else if ("update".equals(action)) {
             int userId = Integer.parseInt(request.getParameter("id"));
@@ -60,7 +64,11 @@ public class UserManagementServlet extends HttpServlet {
             user.setName(request.getParameter("name"));
             user.setEmail(request.getParameter("email"));
             user.setPassword(request.getParameter("password"));
-            user.setProfileDetails(request.getParameter("profileDetails"));
+            user.setRole(request.getParameter("role"));
+            String deptIdStr = request.getParameter("deptId");
+            if (deptIdStr != null && !deptIdStr.isEmpty()) {
+                user.setDeptId(Integer.parseInt(deptIdStr));
+            }
             userManagementDAO.updateUser(user);
         } else if ("delete".equals(action)) {
             int userId = Integer.parseInt(request.getParameter("id"));

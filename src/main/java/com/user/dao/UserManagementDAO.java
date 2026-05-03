@@ -18,12 +18,17 @@ public class UserManagementDAO {
 
     // Add a new user
     public boolean addUser(UserManagement user) {
-        String query = "INSERT INTO users (name, email, password, profile_details) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO users (name, email, password, role, dept_id) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, user.getName());
             preparedStatement.setString(2, user.getEmail());
             preparedStatement.setString(3, user.getPassword());
-            preparedStatement.setString(4, user.getProfileDetails());
+            preparedStatement.setString(4, user.getRole());
+            if (user.getDeptId() != null && user.getDeptId() > 0) {
+                preparedStatement.setInt(5, user.getDeptId());
+            } else {
+                preparedStatement.setNull(5, Types.INTEGER);
+            }
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -39,11 +44,15 @@ public class UserManagementDAO {
                 ResultSet resultSet = statement.executeQuery(query)) {
             while (resultSet.next()) {
                 UserManagement user = new UserManagement();
-                user.setId(resultSet.getInt("id"));
+                user.setId(resultSet.getInt("user_id"));
                 user.setName(resultSet.getString("name"));
                 user.setEmail(resultSet.getString("email"));
                 user.setPassword(resultSet.getString("password"));
-                user.setProfileDetails(resultSet.getString("profile_details"));
+                user.setRole(resultSet.getString("role"));
+                int deptId = resultSet.getInt("dept_id");
+                if (!resultSet.wasNull()) {
+                    user.setDeptId(deptId);
+                }
                 users.add(user);
             }
         } catch (SQLException e) {
@@ -54,13 +63,18 @@ public class UserManagementDAO {
 
     // Update an existing user
     public boolean updateUser(UserManagement user) {
-        String query = "UPDATE users SET name = ?, email = ?, password = ?, profile_details = ? WHERE id = ?";
+        String query = "UPDATE users SET name = ?, email = ?, password = ?, role = ?, dept_id = ? WHERE user_id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, user.getName());
             preparedStatement.setString(2, user.getEmail());
             preparedStatement.setString(3, user.getPassword());
-            preparedStatement.setString(4, user.getProfileDetails());
-            preparedStatement.setInt(5, user.getId());
+            preparedStatement.setString(4, user.getRole());
+            if (user.getDeptId() != null && user.getDeptId() > 0) {
+                preparedStatement.setInt(5, user.getDeptId());
+            } else {
+                preparedStatement.setNull(5, Types.INTEGER);
+            }
+            preparedStatement.setInt(6, user.getId());
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -70,7 +84,7 @@ public class UserManagementDAO {
 
     // Delete a user
     public boolean deleteUser(int userId) {
-        String query = "DELETE FROM users WHERE id = ?";
+        String query = "DELETE FROM users WHERE user_id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, userId);
             return preparedStatement.executeUpdate() > 0;
@@ -81,7 +95,7 @@ public class UserManagementDAO {
     }
 
     public UserManagement getUserById(int id) {
-        String query = "SELECT * FROM users WHERE id = ?";
+        String query = "SELECT * FROM users WHERE user_id = ?";
         UserManagement user = null;
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -89,11 +103,15 @@ public class UserManagementDAO {
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     user = new UserManagement();
-                    user.setId(resultSet.getInt("id"));
+                    user.setId(resultSet.getInt("user_id"));
                     user.setName(resultSet.getString("name"));
                     user.setEmail(resultSet.getString("email"));
                     user.setPassword(resultSet.getString("password"));
-                    user.setProfileDetails(resultSet.getString("profile_details"));
+                    user.setRole(resultSet.getString("role"));
+                    int deptId = resultSet.getInt("dept_id");
+                    if (!resultSet.wasNull()) {
+                        user.setDeptId(deptId);
+                    }
                 }
             }
         } catch (SQLException e) {

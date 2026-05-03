@@ -40,7 +40,13 @@
                 <input type="text" name="name" placeholder="Name" required>
                 <input type="email" name="email" placeholder="Email" required>
                 <input type="password" name="password" placeholder="Password" required>
-                <textarea name="profileDetails" placeholder="Profile Details" required></textarea>
+                <select name="role" required style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px;">
+                    <option value="">Select Role</option>
+                    <option value="STUDENT">Student</option>
+                    <option value="INSTRUCTOR">Instructor</option>
+                    <option value="ADMIN">Admin</option>
+                </select>
+                <input type="number" name="deptId" placeholder="Department ID (Optional)">
                 <button type="submit">Create User</button>
             </form>
         </div>
@@ -53,7 +59,13 @@
                 <input type="text" name="name" placeholder="Name" required>
                 <input type="email" name="email" placeholder="Email" required>
                 <input type="password" name="password" placeholder="Password" required>
-                <textarea name="profileDetails" placeholder="Profile Details" required></textarea>
+                <select name="role" required style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px;">
+                    <option value="">Select Role</option>
+                    <option value="STUDENT">Student</option>
+                    <option value="INSTRUCTOR">Instructor</option>
+                    <option value="ADMIN">Admin</option>
+                </select>
+                <input type="number" name="deptId" placeholder="Department ID (Optional)">
                 <button type="submit">Update User</button>
             </form>
         </div>

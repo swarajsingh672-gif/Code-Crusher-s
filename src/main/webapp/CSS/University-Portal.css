@@ -1,0 +1,195 @@
+/* University Portal - Classic Academic Design */
+
+:root {
+    --uni-navy: #002147;
+    --uni-gold: #D4AF37;
+    --bg-light: #f4f7f6;
+    --text-dark: #333;
+    --border-grey: #ddd;
+}
+
+body {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+    margin: 0;
+    padding: 0;
+}
+
+/* Header */
+.uni-header {
+    background-color: var(--uni-navy);
+    color: white;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 4px solid var(--uni-gold);
+}
+
+.uni-header h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Login Container */
+.login-portal {
+    max-width: 400px;
+    margin: 5rem auto;
+    background: white;
+    padding: 2rem;
+    border: 1px solid var(--border-grey);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.login-portal h2 {
+    text-align: center;
+    color: var(--uni-navy);
+    border-bottom: 2px solid var(--uni-gold);
+    padding-bottom: 0.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.8rem;
+    box-sizing: border-box;
+    border: 1px solid var(--border-grey);
+}
+
+.btn-primary {
+    background-color: var(--uni-navy);
+    color: white;
+    width: 100%;
+    padding: 1rem;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #003366;
+}
+
+/* Dashboard Layout */
+.dashboard-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: white;
+    border-right: 1px solid var(--border-grey);
+    padding: 2rem 1rem;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar li {
+    margin-bottom: 1rem;
+}
+
+.sidebar a {
+    text-decoration: none;
+    color: var(--uni-navy);
+    font-weight: bold;
+    display: block;
+    padding: 0.5rem;
+    border-radius: 4px;
+}
+
+.sidebar a:hover {
+    background-color: var(--bg-light);
+}
+
+.main-content {
+    flex: 1;
+    padding: 2rem;
+}
+
+/* Tables */
+
+/* Role Selection */
+.role-select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid var(--border-grey);
+    background: white;
+    font-family: inherit;
+    margin-bottom: 1rem;
+}
+
+/* Footer Style */
+.uni-footer {
+    text-align: center;
+    margin-top: 2rem;
+    color: #777;
+    font-size: 0.85rem;
+}
+
+.dashboard-footer-classic {
+    text-align: center;
+    padding: 1rem;
+    background: #eee;
+    border-top: 1px solid var(--border-grey);
+}
+
+/* Dashboard Summary Cards */
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.summary-card {
+    background: white;
+    padding: 1.5rem;
+    border: 1px solid var(--border-grey);
+    text-align: center;
+}
+
+.summary-card h3 {
+    margin: 0;
+    color: var(--uni-navy);
+    font-size: 1rem;
+}
+
+.summary-card p {
+    font-size: 2.5rem;
+    margin: 0.5rem 0 0 0;
+    color: var(--uni-navy);
+    font-weight: bold;
+}
+
+.logout-link-classic {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    border: 1px solid white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 4px;
+    margin-left: 1rem;
+}
+
+.logout-link-classic:hover {
+    background: white;
+    color: var(--uni-navy);
+}

@@ -5,7 +5,8 @@ public class UserManagement {
     private String name;
     private String email;
     private String password;
-    private String profileDetails;
+    private String role;
+    private Integer deptId;
 
     // Getters and setters
     public int getId() {
@@ -40,11 +41,19 @@ public class UserManagement {
         this.password = password;
     }
 
-    public String getProfileDetails() {
-        return profileDetails;
+    public String getRole() {
+        return role;
     }
 
-    public void setProfileDetails(String profileDetails) {
-        this.profileDetails = profileDetails;
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public Integer getDeptId() {
+        return deptId;
+    }
+
+    public void setDeptId(Integer deptId) {
+        this.deptId = deptId;
     }
 }

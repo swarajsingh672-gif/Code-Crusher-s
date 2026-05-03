@@ -13,13 +13,13 @@ public class AssignmentDAO {
     }
 
     public boolean createAssignment(Assignment assignment) {
-        String sql = "INSERT INTO assignmenttable (course_id, course_name, assignment, last_date) " +
-                     "SELECT ?, course_name, ?, ? FROM courses WHERE course_id = ?";
+        String sql = "INSERT INTO assignments (section_id, title, description, due_date, max_points) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, assignment.getCourseId());
-            stmt.setString(2, assignment.getAssignment());
-            stmt.setDate(3, assignment.getLastDate());
-            stmt.setInt(4, assignment.getCourseId());
+            stmt.setInt(1, assignment.getSectionId());
+            stmt.setString(2, assignment.getTitle());
+            stmt.setString(3, assignment.getDescription());
+            stmt.setTimestamp(4, assignment.getDueDate());
+            stmt.setInt(5, assignment.getMaxPoints());
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -27,19 +27,20 @@ public class AssignmentDAO {
         }
     }
 
-    public List<Assignment> getAllAssignments() {
-        String sql = "SELECT * FROM assignmenttable";
+    public List<Assignment> getAssignmentsBySection(int sectionId) {
+        String sql = "SELECT * FROM assignments WHERE section_id = ?";
         List<Assignment> assignments = new ArrayList<>();
-        try (Statement stmt = connection.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, sectionId);
+            ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 Assignment assignment = new Assignment();
                 assignment.setAssignmentId(rs.getInt("assignment_id"));
-                assignment.setCourseId(rs.getInt("course_id"));
-                assignment.setCourseName(rs.getString("course_name"));
-                assignment.setAssignment(rs.getString("assignment"));
-                assignment.setCreatedDate(rs.getDate("created_date"));
-                assignment.setLastDate(rs.getDate("last_date"));
+                assignment.setSectionId(rs.getInt("section_id"));
+                assignment.setTitle(rs.getString("title"));
+                assignment.setDescription(rs.getString("description"));
+                assignment.setDueDate(rs.getTimestamp("due_date"));
+                assignment.setMaxPoints(rs.getInt("max_points"));
                 assignments.add(assignment);
             }
         } catch (SQLException e) {

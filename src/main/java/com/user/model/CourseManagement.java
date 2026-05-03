@@ -1,12 +1,11 @@
 package com.user.model;
 
-import java.util.Date;
-
 public class CourseManagement {
     private int courseId;
+    private String courseCode;
     private String courseName;
-    private String description;
-    private Date createdAt;
+    private int credits;
+    private Integer deptId;
 
     // Getters and setters
     public int getCourseId() {
@@ -17,6 +16,14 @@ public class CourseManagement {
         this.courseId = courseId;
     }
 
+    public String getCourseCode() {
+        return courseCode;
+    }
+
+    public void setCourseCode(String courseCode) {
+        this.courseCode = courseCode;
+    }
+
     public String getCourseName() {
         return courseName;
     }
@@ -25,19 +32,19 @@ public class CourseManagement {
         this.courseName = courseName;
     }
 
-    public String getDescription() {
-        return description;
+    public int getCredits() {
+        return credits;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setCredits(int credits) {
+        this.credits = credits;
     }
 
-    public Date getCreatedAt() {
-        return createdAt;
+    public Integer getDeptId() {
+        return deptId;
     }
 
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
+    public void setDeptId(Integer deptId) {
+        this.deptId = deptId;
     }
 }

@@ -16,48 +16,54 @@ public class SubmissionsDAO {
         this.connection = connection;
     }
 
-    public List<Submissions> getAllSubmissions() throws SQLException {
+    public boolean submitAssignment(Submissions submission) {
+        String query = "INSERT INTO submissions (assignment_id, student_id, file_path) VALUES (?, ?, ?)";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, submission.getAssignmentId());
+            stmt.setInt(2, submission.getStudentId());
+            stmt.setString(3, submission.getFilePath());
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean gradeSubmission(int submissionId, double grade, String feedback) {
+        String query = "UPDATE submissions SET grade = ?, feedback = ? WHERE submission_id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setDouble(1, grade);
+            stmt.setString(2, feedback);
+            stmt.setInt(3, submissionId);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public List<Submissions> getSubmissionsByAssignment(int assignmentId) {
         List<Submissions> submissions = new ArrayList<>();
-        String query = "SELECT * FROM submissions";
-        try (PreparedStatement stmt = connection.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
+        String query = "SELECT * FROM submissions WHERE assignment_id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, assignmentId);
+            ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 Submissions submission = new Submissions();
                 submission.setSubmissionId(rs.getInt("submission_id"));
                 submission.setAssignmentId(rs.getInt("assignment_id"));
-                submission.setUserId(rs.getInt("user_id"));
-                submission.setUserName(rs.getString("user_name"));
-                submission.setUrl(rs.getString("url"));
-                submission.setSubmittedAt(rs.getString("submitted_at"));
+                submission.setStudentId(rs.getInt("student_id"));
+                submission.setFilePath(rs.getString("file_path"));
+                submission.setSubmittedAt(rs.getTimestamp("submitted_at"));
+                if (rs.getObject("grade") != null) {
+                    submission.setGrade(rs.getDouble("grade"));
+                }
+                submission.setFeedback(rs.getString("feedback"));
                 submissions.add(submission);
-            }
-        }
-        return submissions;
-    }
-
-    public static void main(String[] args) {
-        // Database connection details
-        String dbURL = "jdbc:mysql://localhost:3306/lms"; // Replace with your database name
-        String dbUser = "root"; // Replace with your database username
-        String dbPassword = "akshat@123"; // Replace with your database password
-
-        try (Connection connection = DriverManager.getConnection(dbURL, dbUser, dbPassword)) {
-            // Instantiate the DAO
-            SubmissionsDAO submissionsDAO = new SubmissionsDAO(connection);
-
-            // Fetch submissions and print them
-            List<Submissions> submissions = submissionsDAO.getAllSubmissions();
-            for (Submissions submission : submissions) {
-                System.out.println("Submission ID: " + submission.getSubmissionId());
-                System.out.println("Assignment ID: " + submission.getAssignmentId());
-                System.out.println("User ID: " + submission.getUserId());
-                System.out.println("User Name: " + submission.getUserName());
-                System.out.println("URL: " + submission.getUrl());
-                System.out.println("Submitted At: " + submission.getSubmittedAt());
-                System.out.println("---------------------------------");
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return submissions;
     }
 }

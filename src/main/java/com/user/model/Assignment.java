@@ -4,28 +4,27 @@ import java.sql.Date;
 
 public class Assignment {
     private int assignmentId;
-    private int courseId;
-    private String courseName;
-    private String assignment;
-    private Date createdDate;
-    private Date lastDate;
+    private int sectionId;
+    private String title;
+    private String description;
+    private java.sql.Timestamp dueDate;
+    private int maxPoints;
 
-    // Getters and Setters
     public int getAssignmentId() { return assignmentId; }
     public void setAssignmentId(int assignmentId) { this.assignmentId = assignmentId; }
 
-    public int getCourseId() { return courseId; }
-    public void setCourseId(int courseId) { this.courseId = courseId; }
+    public int getSectionId() { return sectionId; }
+    public void setSectionId(int sectionId) { this.sectionId = sectionId; }
 
-    public String getCourseName() { return courseName; }
-    public void setCourseName(String courseName) { this.courseName = courseName; }
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
 
-    public String getAssignment() { return assignment; }
-    public void setAssignment(String assignment) { this.assignment = assignment; }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
-    public Date getCreatedDate() { return createdDate; }
-    public void setCreatedDate(Date createdDate) { this.createdDate = createdDate; }
+    public java.sql.Timestamp getDueDate() { return dueDate; }
+    public void setDueDate(java.sql.Timestamp dueDate) { this.dueDate = dueDate; }
 
-    public Date getLastDate() { return lastDate; }
-    public void setLastDate(Date lastDate) { this.lastDate = lastDate; }
+    public int getMaxPoints() { return maxPoints; }
+    public void setMaxPoints(int maxPoints) { this.maxPoints = maxPoints; }
 }

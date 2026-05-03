@@ -52,20 +52,26 @@ public class CourseManagementServlet extends HttpServlet {
 
         if ("create".equals(action)) {
             CourseManagement course = new CourseManagement();
+            course.setCourseCode(request.getParameter("courseCode"));
             course.setCourseName(request.getParameter("courseName"));
-            course.setDescription(request.getParameter("description"));
-            course.setCreatedAt(new java.util.Date());
+            course.setCredits(Integer.parseInt(request.getParameter("credits")));
+            String deptIdStr = request.getParameter("deptId");
+            if (deptIdStr != null && !deptIdStr.isEmpty()) {
+                course.setDeptId(Integer.parseInt(deptIdStr));
+            }
             courseManagementDAO.createCourse(course);
-
-            
 
             response.sendRedirect("course");
         } else if ("update".equals(action)) {
             CourseManagement course = new CourseManagement();
             course.setCourseId(Integer.parseInt(request.getParameter("courseId")));
+            course.setCourseCode(request.getParameter("courseCode"));
             course.setCourseName(request.getParameter("courseName"));
-            course.setDescription(request.getParameter("description"));
-            course.setCreatedAt(new java.util.Date());
+            course.setCredits(Integer.parseInt(request.getParameter("credits")));
+            String deptIdStr = request.getParameter("deptId");
+            if (deptIdStr != null && !deptIdStr.isEmpty()) {
+                course.setDeptId(Integer.parseInt(deptIdStr));
+            }
             courseManagementDAO.updateCourse(course);
             response.sendRedirect("course");
         } else if ("delete".equals(action)) {

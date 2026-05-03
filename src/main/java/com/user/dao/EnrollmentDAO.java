@@ -1,37 +1,43 @@
 package com.user.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import com.user.model.Enrollment;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.user.model.Enrollment;
-
 public class EnrollmentDAO {
-    private final Connection connection;
+    private Connection connection;
 
     public EnrollmentDAO(Connection connection) {
         this.connection = connection;
     }
 
-    public List<Enrollment> getEnrollmentsByCourseId(int courseId) {
-        String sql = "SELECT * FROM Users_courses WHERE course_1 = ? OR course_2 = ? OR course_3 = ? OR course_4 = ? OR course_5 = ?";
+    public boolean enrollStudent(int studentId, int sectionId) {
+        String sql = "INSERT INTO enrollments (student_id, section_id) VALUES (?, ?)";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, studentId);
+            stmt.setInt(2, sectionId);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public List<Enrollment> getEnrollmentsForStudent(int studentId) {
+        String sql = "SELECT * FROM enrollments WHERE student_id = ?";
         List<Enrollment> enrollments = new ArrayList<>();
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, courseId);
-            stmt.setInt(2, courseId);
-            stmt.setInt(3, courseId);
-            stmt.setInt(4, courseId);
-            stmt.setInt(5, courseId);
+            stmt.setInt(1, studentId);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                enrollments.add(new Enrollment(
-                    rs.getInt("user_id"), // Assuming user_id corresponds to enrollment ID
-                    courseId,
-                    rs.getInt("user_id") // Assuming user_id corresponds to student ID
-                ));
+                Enrollment enrollment = new Enrollment();
+                enrollment.setEnrollmentId(rs.getInt("enrollment_id"));
+                enrollment.setStudentId(rs.getInt("student_id"));
+                enrollment.setSectionId(rs.getInt("section_id"));
+                enrollment.setGrade(rs.getString("grade"));
+                enrollment.setEnrolledAt(rs.getTimestamp("enrolled_at"));
+                enrollments.add(enrollment);
             }
         } catch (SQLException e) {
             e.printStackTrace();

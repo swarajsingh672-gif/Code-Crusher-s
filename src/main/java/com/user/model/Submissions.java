@@ -3,57 +3,30 @@ package com.user.model;
 public class Submissions {
     private int submissionId;
     private int assignmentId;
-    private int userId;
-    private String userName;
-    private String url;
-    private String submittedAt;
+    private int studentId;
+    private String filePath;
+    private java.sql.Timestamp submittedAt;
+    private Double grade;
+    private String feedback;
 
-    // Getters and Setters
-    public int getSubmissionId() {
-        return submissionId;
-    }
+    public int getSubmissionId() { return submissionId; }
+    public void setSubmissionId(int submissionId) { this.submissionId = submissionId; }
 
-    public void setSubmissionId(int submissionId) {
-        this.submissionId = submissionId;
-    }
+    public int getAssignmentId() { return assignmentId; }
+    public void setAssignmentId(int assignmentId) { this.assignmentId = assignmentId; }
 
-    public int getAssignmentId() {
-        return assignmentId;
-    }
+    public int getStudentId() { return studentId; }
+    public void setStudentId(int studentId) { this.studentId = studentId; }
 
-    public void setAssignmentId(int assignmentId) {
-        this.assignmentId = assignmentId;
-    }
+    public String getFilePath() { return filePath; }
+    public void setFilePath(String filePath) { this.filePath = filePath; }
 
-    public int getUserId() {
-        return userId;
-    }
+    public java.sql.Timestamp getSubmittedAt() { return submittedAt; }
+    public void setSubmittedAt(java.sql.Timestamp submittedAt) { this.submittedAt = submittedAt; }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
+    public Double getGrade() { return grade; }
+    public void setGrade(Double grade) { this.grade = grade; }
 
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getSubmittedAt() {
-        return submittedAt;
-    }
-
-    public void setSubmittedAt(String submittedAt) {
-        this.submittedAt = submittedAt;
-    }
+    public String getFeedback() { return feedback; }
+    public void setFeedback(String feedback) { this.feedback = feedback; }
 }

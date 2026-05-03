@@ -1,8 +1,10 @@
 package com.user.controller;
 
 import com.user.dao.EnrollmentDAO;
+import com.user.dao.SectionDAO;
 import com.user.model.Enrollment;
-import com.user.utility.DatabaseConnection;
+import com.user.model.Section;
+import com.user.utility.DBConnection;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,53 +12,53 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.util.List;
 
-@WebServlet("/viewEnrollmentsByCourseId")
+@WebServlet("/enrollment")
 public class EnrollmentManagementServlet extends HttpServlet {
+    private EnrollmentDAO enrollmentDAO;
+    private SectionDAO sectionDAO;
+
+    @Override
+    public void init() throws ServletException {
+        Connection connection = DBConnection.getConnection();
+        enrollmentDAO = new EnrollmentDAO(connection);
+        sectionDAO = new SectionDAO(connection);
+    }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String courseIdParam = request.getParameter("courseId");
-        response.setContentType("application/json");
-        PrintWriter out = response.getWriter();
-
-        if (courseIdParam == null || courseIdParam.isEmpty()) {
-            out.write("{\"error\": \"Course ID is required\"}");
-            return;
-        }
-
-        int courseId;
-        try {
-            courseId = Integer.parseInt(courseIdParam);
-        } catch (NumberFormatException e) {
-            out.write("{\"error\": \"Invalid Course ID\"}");
-            return;
-        }
-
-        try (Connection connection = DatabaseConnection.initializeDatabase()) {
-            EnrollmentDAO enrollmentDAO = new EnrollmentDAO(connection);
-            List<Enrollment> enrollments = enrollmentDAO.getEnrollmentsByCourseId(courseId);
-
-            if (enrollments.isEmpty()) {
-                out.write("{\"message\": \"No enrollments found for this course\"}");
-            } else {
-                StringBuilder jsonResponse = new StringBuilder("[");
-                for (Enrollment enrollment : enrollments) {
-                    jsonResponse.append("{")
-                        .append("\"id\": ").append(enrollment.getId()).append(",")
-                        .append("\"courseId\": ").append(enrollment.getCourseId()).append(",")
-                        .append("\"studentId\": ").append(enrollment.getStudentId())
-                        .append("},");
-                }
-                jsonResponse.setLength(jsonResponse.length() - 1); // Remove trailing comma
-                jsonResponse.append("]");
-                out.write(jsonResponse.toString());
+        String action = request.getParameter("action");
+        if (action == null || action.isEmpty() || "listAvailable".equals(action)) {
+            List<Section> availableSections = sectionDAO.getAllSections();
+            request.setAttribute("sections", availableSections);
+            request.getRequestDispatcher("Student-registration.jsp").forward(request, response);
+        } else if ("myEnrollments".equals(action)) {
+            javax.servlet.http.HttpSession session = request.getSession();
+            Integer sessionUserId = (Integer) session.getAttribute("userId");
+            if (sessionUserId != null) {
+                List<Enrollment> myEnrollments = enrollmentDAO.getEnrollmentsForStudent(sessionUserId);
+                request.setAttribute("enrollments", myEnrollments);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            out.write("{\"error\": \"An error occurred while fetching enrollments\"}");
+            request.getRequestDispatcher("Student-registration.jsp").forward(request, response);
+        }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String action = request.getParameter("action");
+        if ("enroll".equals(action)) {
+            int sectionId = Integer.parseInt(request.getParameter("sectionId"));
+            int studentId = (Integer) request.getSession().getAttribute("userId");
+
+            boolean success = enrollmentDAO.enrollStudent(studentId, sectionId);
+            if (success) {
+                request.setAttribute("message", "Successfully enrolled!");
+            } else {
+                request.setAttribute("error", "Enrollment failed. You might be already enrolled.");
+            }
+            doGet(request, response);
         }
     }
 }

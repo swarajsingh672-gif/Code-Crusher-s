@@ -37,8 +37,10 @@
             <h2>Create Course</h2>
             <form action="course" method="post">
                 <input type="hidden" name="action" value="create">
+                <input type="text" name="courseCode" placeholder="Course Code (e.g. CS101)" required>
                 <input type="text" name="courseName" placeholder="Course Name" required>
-                <textarea name="description" placeholder="Course Description" required></textarea>
+                <input type="number" name="credits" placeholder="Credits (e.g. 3)" value="3" required>
+                <input type="number" name="deptId" placeholder="Department ID (Optional)">
                 <button type="submit">Create Course</button>
             </form>
         </div>
@@ -48,8 +50,10 @@
             <form action="course" method="post">
                 <input type="hidden" name="action" value="update">
                 <input type="number" name="courseId" placeholder="Course ID" required>
+                <input type="text" name="courseCode" placeholder="Course Code (e.g. CS101)" required>
                 <input type="text" name="courseName" placeholder="Course Name" required>
-                <textarea name="description" placeholder="Course Description" required></textarea>
+                <input type="number" name="credits" placeholder="Credits (e.g. 3)" required>
+                <input type="number" name="deptId" placeholder="Department ID (Optional)">
                 <button type="submit">Update Course</button>
             </form>
         </div>

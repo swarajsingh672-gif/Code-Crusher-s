@@ -32,18 +32,51 @@ public class SubmissionListServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            // Fetch all submissions
-            List<Submissions> submissions = submissionsDAO.getAllSubmissions();
+        String action = request.getParameter("action");
+        if ("viewByAssignment".equals(action)) {
+            try {
+                int assignmentId = Integer.parseInt(request.getParameter("assignmentId"));
+                List<Submissions> submissions = submissionsDAO.getSubmissionsByAssignment(assignmentId);
+                request.setAttribute("submissions", submissions);
+                request.getRequestDispatcher("Instructor-submissions.jsp").forward(request, response);
+            } catch (Exception e) {
+                e.printStackTrace();
+                request.setAttribute("message", "Failed to fetch submissions");
+                request.getRequestDispatcher("Instructor-submissions.jsp").forward(request, response);
+            }
+        }
+    }
 
-            // Set submissions as a request attribute
-            request.setAttribute("submissions", submissions);
-
-            // Forward request to JSP
-            RequestDispatcher dispatcher = request.getRequestDispatcher("Admin-submissions-list.jsp");
-            dispatcher.forward(request, response);
-        } catch (Exception e) {
-            throw new ServletException("Failed to fetch submissions", e);
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String action = request.getParameter("action");
+        if ("submit".equals(action)) {
+            try {
+                Submissions submission = new Submissions();
+                submission.setAssignmentId(Integer.parseInt(request.getParameter("assignmentId")));
+                submission.setStudentId(Integer.parseInt(request.getParameter("studentId")));
+                submission.setFilePath(request.getParameter("filePath")); // In real app, this would handle file upload
+                
+                boolean success = submissionsDAO.submitAssignment(submission);
+                request.setAttribute("message", success ? "Submitted successfully!" : "Failed to submit.");
+                request.getRequestDispatcher("Student-assignments.jsp").forward(request, response);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else if ("grade".equals(action)) {
+            try {
+                int submissionId = Integer.parseInt(request.getParameter("submissionId"));
+                double grade = Double.parseDouble(request.getParameter("grade"));
+                String feedback = request.getParameter("feedback");
+                
+                submissionsDAO.gradeSubmission(submissionId, grade, feedback);
+                
+                int assignmentId = Integer.parseInt(request.getParameter("assignmentId"));
+                response.sendRedirect("ViewSubmissionServlet?action=viewByAssignment&assignmentId=" + assignmentId);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }

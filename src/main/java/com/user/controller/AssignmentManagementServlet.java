@@ -14,7 +14,7 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.util.List;
 
-@WebServlet(name = "AssignmentManagementServlet", urlPatterns = { "/createAssignment", "/viewAssignments" })
+@WebServlet(name = "AssignmentManagementServlet", urlPatterns = { "/AssignmentManagementServlet", "/createAssignment", "/viewAssignments" })
 public class AssignmentManagementServlet extends HttpServlet {
     private AssignmentDAO assignmentDAO;
 
@@ -27,25 +27,34 @@ public class AssignmentManagementServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        if (request.getServletPath().equals("/createAssignment")) {
+        String action = request.getParameter("action");
+        if ("create".equals(action)) {
             try {
-                int courseId = Integer.parseInt(request.getParameter("courseId"));
-                String assignmentText = request.getParameter("assignment");
-                Date lastDate = Date.valueOf(request.getParameter("lastDate"));
+                int sectionId = Integer.parseInt(request.getParameter("sectionId"));
+                String title = request.getParameter("title");
+                String description = request.getParameter("description");
+                java.sql.Timestamp dueDate = null;
+                String dueDateStr = request.getParameter("dueDate");
+                if (dueDateStr != null && !dueDateStr.isEmpty()) {
+                    dueDate = java.sql.Timestamp.valueOf(dueDateStr.replace("T", " ") + ":00");
+                }
+                int maxPoints = Integer.parseInt(request.getParameter("maxPoints"));
 
                 Assignment assignment = new Assignment();
-                assignment.setCourseId(courseId);
-                assignment.setAssignment(assignmentText);
-                assignment.setLastDate(lastDate);
+                assignment.setSectionId(sectionId);
+                assignment.setTitle(title);
+                assignment.setDescription(description);
+                assignment.setDueDate(dueDate);
+                assignment.setMaxPoints(maxPoints);
 
                 boolean success = assignmentDAO.createAssignment(assignment);
                 String message = success ? "Assignment created successfully!" : "Failed to create assignment.";
                 request.setAttribute("message", message);
-                request.getRequestDispatcher("Admin-assignment-management.jsp").forward(request, response);
+                request.getRequestDispatcher("Instructor-assignments.jsp").forward(request, response);
             } catch (Exception e) {
                 e.printStackTrace();
                 request.setAttribute("message", "An error occurred while creating the assignment.");
-                request.getRequestDispatcher("Admin-assignment-management.jsp").forward(request, response);
+                request.getRequestDispatcher("Instructor-assignments.jsp").forward(request, response);
             }
         }
     }
@@ -53,15 +62,28 @@ public class AssignmentManagementServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        if (request.getServletPath().equals("/viewAssignments")) {
+        String action = request.getParameter("action");
+        if ("viewBySection".equals(action)) {
             try {
-                List<Assignment> assignments = assignmentDAO.getAllAssignments();
+                int sectionId = Integer.parseInt(request.getParameter("sectionId"));
+                List<Assignment> assignments = assignmentDAO.getAssignmentsBySection(sectionId);
                 request.setAttribute("assignments", assignments);
-                request.getRequestDispatcher("Admin-show-assignment.jsp").forward(request, response);
+                request.getRequestDispatcher("Instructor-assignments.jsp").forward(request, response);
             } catch (Exception e) {
                 e.printStackTrace();
                 request.setAttribute("message", "An error occurred while fetching assignments.");
-                request.getRequestDispatcher("Admin-assignment-list.jsp").forward(request, response);
+                request.getRequestDispatcher("Instructor-assignments.jsp").forward(request, response);
+            }
+        } else if ("studentViewBySection".equals(action)) {
+            try {
+                int sectionId = Integer.parseInt(request.getParameter("sectionId"));
+                List<Assignment> assignments = assignmentDAO.getAssignmentsBySection(sectionId);
+                request.setAttribute("assignments", assignments);
+                request.getRequestDispatcher("Student-assignments.jsp").forward(request, response);
+            } catch (Exception e) {
+                e.printStackTrace();
+                request.setAttribute("message", "An error occurred while fetching assignments.");
+                request.getRequestDispatcher("Student-assignments.jsp").forward(request, response);
             }
         }
     }

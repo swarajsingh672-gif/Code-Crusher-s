@@ -21,9 +21,11 @@ public class CourseManagementDAO {
             while (rs.next()) {
                 CourseManagement course = new CourseManagement();
                 course.setCourseId(rs.getInt("course_id"));
+                course.setCourseCode(rs.getString("course_code"));
                 course.setCourseName(rs.getString("course_name"));
-                course.setDescription(rs.getString("description"));
-                course.setCreatedAt(rs.getTimestamp("created_at"));
+                course.setCredits(rs.getInt("credits"));
+                int deptId = rs.getInt("dept_id");
+                if (!rs.wasNull()) course.setDeptId(deptId);
                 courses.add(course);
             }
         } catch (SQLException e) {
@@ -41,9 +43,11 @@ public class CourseManagementDAO {
                 if (rs.next()) {
                     CourseManagement course = new CourseManagement();
                     course.setCourseId(rs.getInt("course_id"));
+                    course.setCourseCode(rs.getString("course_code"));
                     course.setCourseName(rs.getString("course_name"));
-                    course.setDescription(rs.getString("description"));
-                    course.setCreatedAt(rs.getTimestamp("created_at"));
+                    course.setCredits(rs.getInt("credits"));
+                    int deptId = rs.getInt("dept_id");
+                    if (!rs.wasNull()) course.setDeptId(deptId);
                     return course;
                 }
             }
@@ -54,11 +58,16 @@ public class CourseManagementDAO {
     }
 
     public void createCourse(CourseManagement course) {
-        String query = "INSERT INTO courses (course_name, description, created_at) VALUES (?, ?, ?)";
+        String query = "INSERT INTO courses (course_code, course_name, credits, dept_id) VALUES (?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setString(1, course.getCourseName());
-            stmt.setString(2, course.getDescription());
-            stmt.setTimestamp(3, new Timestamp(course.getCreatedAt().getTime()));
+            stmt.setString(1, course.getCourseCode());
+            stmt.setString(2, course.getCourseName());
+            stmt.setInt(3, course.getCredits());
+            if (course.getDeptId() != null) {
+                stmt.setInt(4, course.getDeptId());
+            } else {
+                stmt.setNull(4, Types.INTEGER);
+            }
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -66,12 +75,17 @@ public class CourseManagementDAO {
     }
 
     public void updateCourse(CourseManagement course) {
-        String query = "UPDATE courses SET course_name = ?, description = ?, created_at = ? WHERE course_id = ?";
+        String query = "UPDATE courses SET course_code = ?, course_name = ?, credits = ?, dept_id = ? WHERE course_id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setString(1, course.getCourseName());
-            stmt.setString(2, course.getDescription());
-            stmt.setTimestamp(3, new Timestamp(course.getCreatedAt().getTime()));
-            stmt.setInt(4, course.getCourseId());
+            stmt.setString(1, course.getCourseCode());
+            stmt.setString(2, course.getCourseName());
+            stmt.setInt(3, course.getCredits());
+            if (course.getDeptId() != null) {
+                stmt.setInt(4, course.getDeptId());
+            } else {
+                stmt.setNull(4, Types.INTEGER);
+            }
+            stmt.setInt(5, course.getCourseId());
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
