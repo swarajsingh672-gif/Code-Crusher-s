@@ -1,11 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+    if (request.getAttribute("deptCount") == null) {
+        response.sendRedirect("adminDashboard");
+        return;
+    }
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>University Admin Portal</title>
-    <link rel="stylesheet" href="CSS/University-Portal.css">
+    <link rel="stylesheet" href="CSS/global.css">
+    <link rel="stylesheet" href="CSS/dashboard.css">
 </head>
 <body>
     <header class="uni-header">
@@ -17,7 +24,7 @@
         <nav class="sidebar">
             <h3>Management</h3>
             <ul>
-                <li><a href="#">Department List</a></li>
+                <li><a href="adminDashboard?action=departments">Department List</a></li>
                 <li><a href="Admin-course-management.jsp">Course Catalog</a></li>
                 <li><a href="section?action=list">Section Scheduling</a></li>
                 <li><a href="Admin-user-management.jsp">User Accounts</a></li>
@@ -29,15 +36,15 @@
             <div class="summary-grid">
                 <div class="summary-card">
                     <h3>Departments</h3>
-                    <p>1</p>
+                    <p><%= request.getAttribute("deptCount") != null ? request.getAttribute("deptCount") : 0 %></p>
                 </div>
                 <div class="summary-card">
                     <h3>Total Users</h3>
-                    <p>1</p>
+                    <p><%= request.getAttribute("userCount") != null ? request.getAttribute("userCount") : 0 %></p>
                 </div>
                 <div class="summary-card">
                     <h3>Active Courses</h3>
-                    <p>0</p>
+                    <p><%= request.getAttribute("courseCount") != null ? request.getAttribute("courseCount") : 0 %></p>
                 </div>
             </div>
 

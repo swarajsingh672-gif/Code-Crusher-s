@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Management</title>
-    <link rel="stylesheet" href="CSS/user-management.css">
+    <link rel="stylesheet" href="CSS/global.css">
+    <link rel="stylesheet" href="CSS/forms.css">
     <script>
         function showForm(formId) {
             // Hide all forms
@@ -79,9 +80,8 @@
             </form>
         </div>
 
-        <div class="user-list">
-            <!-- Optional: List of users or other user management features can go here -->
-        </div>
+        <br>
+        <div style="text-align: center;"><a href="adminDashboard" class="button">Back to Dashboard</a></div>
     </div>
 </body>
 </html>

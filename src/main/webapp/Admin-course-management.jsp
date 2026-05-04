@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Course Management</title>
-    <link rel="stylesheet" href="CSS/Admin-course-management.css">
+    <link rel="stylesheet" href="CSS/global.css">
+    <link rel="stylesheet" href="CSS/forms.css">
     <script>
         function showForm(formId) {
             // Hide all forms
@@ -68,8 +69,8 @@
         </div>
 
         <div class="course-list">
-            <!-- Optional: List of courses or other course management features can go here -->
-        </div>
+        <br>
+        <div style="text-align: center;"><a href="adminDashboard" class="button">Back to Dashboard</a></div>
     </div>
 </body>
 </html>

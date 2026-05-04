@@ -1,7 +1,9 @@
 com\user\dao\CourseManagementDAO.class
 com\user\dao\SectionDAO.class
+com\user\dao\AdminDashboardDAO.class
 com\user\dao\EnrollmentDAO.class
 com\user\utility\DatabaseConnection.class
+com\user\controller\AdminDashboardServlet.class
 com\user\dao\AssignmentDAO.class
 com\user\controller\AssignmentManagementServlet.class
 com\user\utility\DBConnection.class
@@ -14,6 +16,7 @@ com\user\model\UserManagement.class
 com\user\model\Assignment.class
 com\user\controller\LoginServlet.class
 com\user\model\AdminLogin.class
+com\user\model\Department.class
 com\user\controller\SectionServlet.class
 com\user\model\Submissions.class
 com\user\model\UserLogin.class

@@ -1,0 +1,78 @@
+/* Forms and Tables Style */
+
+.container { 
+    max-width: 800px; 
+    margin: 50px auto; 
+    padding: 20px; 
+    background: #fff; 
+    border-radius: 8px; 
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
+}
+
+h1, h2 { 
+    text-align: center; 
+    color: #333; 
+}
+
+form { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 15px; 
+    margin-bottom: 30px; 
+}
+
+input, select { 
+    padding: 10px; 
+    font-size: 16px; 
+    border: 1px solid #ddd; 
+    border-radius: 5px; 
+}
+
+button, .button { 
+    background-color: #002147; 
+    color: #fff; 
+    cursor: pointer; 
+    border: none; 
+    padding: 10px 15px; 
+    font-size: 16px; 
+    border-radius: 5px; 
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+}
+
+button:hover, .button:hover { 
+    background-color: #003366; 
+}
+
+table { 
+    width: 100%; 
+    border-collapse: collapse; 
+    margin-top: 20px; 
+}
+
+th, td { 
+    border: 1px solid #ddd; 
+    padding: 10px; 
+    text-align: left; 
+}
+
+th { 
+    background-color: #002147; 
+    color: white; 
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.form-container {
+    background: #fdfdfd;
+    padding: 20px;
+    border: 1px solid #eee;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
